@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week-End Amicale CTI — RIU Baobab</title>
+<style>
+:root{
+  --red:#CC0000;
+  --black:#1A1A1A;
+  --dgray:#444444;
+  --gray:#777777;
+  --lgray:#F0F0F0;
+  --xlgray:#F8F8F8;
+  --white:#FFFFFF;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--xlgray);color:var(--black);}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(26,26,26,0.96);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;height:56px;
+  backdrop-filter:blur(8px);
+}
+.nav-logo{color:var(--white);font-weight:700;font-size:1em;letter-spacing:.04em;}
+.nav-logo span{color:var(--red);}
+.nav-links{display:flex;gap:6px;}
+.nav-links a{
+  color:rgba(255,255,255,.75);text-decoration:none;
+  font-size:.8em;font-weight:600;padding:6px 12px;border-radius:20px;transition:.2s;
+}
+.nav-links a:hover{color:var(--white);background:rgba(204,0,0,.35);}
+@media(max-width:600px){.nav-links{display:none;}}
+
+.hero{
+  min-height:100vh;
+  background:linear-gradient(150deg,var(--black) 0%,#2a0000 50%,var(--red) 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:80px 24px 60px;text-align:center;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 60%,rgba(204,0,0,.18) 0%,transparent 70%);
+}
+.hero-tag{
+  display:inline-block;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+  color:rgba(255,255,255,.85);font-size:.75em;font-weight:700;letter-spacing:.1em;
+  padding:6px 18px;border-radius:20px;margin-bottom:24px;text-transform:uppercase;
+}
+.hero h1{font-size:clamp(2.4em,7vw,4.8em);font-weight:900;color:var(--white);line-height:1.05;letter-spacing:-.02em;margin-bottom:12px;}
+.hero h1 span{color:var(--red);display:block;}
+.hero-sub{font-size:clamp(1em,3vw,1.4em);color:rgba(255,255,255,.7);margin-bottom:10px;font-weight:300;}
+.hero-loc{font-size:.95em;color:rgba(255,255,255,.5);letter-spacing:.06em;margin-bottom:48px;}
+.hero-dates{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-bottom:48px;}
+.hero-date{
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);
+  border-radius:12px;padding:16px 24px;text-align:center;min-width:100px;
+}
+.hero-date .day{font-size:.7em;color:rgba(255,255,255,.55);letter-spacing:.08em;text-transform:uppercase;font-weight:600;}
+.hero-date .num{font-size:2em;color:var(--white);font-weight:900;line-height:1;}
+.hero-date .month{font-size:.75em;color:var(--red);font-weight:700;letter-spacing:.05em;}
+.hero-spirit{
+  max-width:480px;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
+  border-radius:16px;padding:20px 28px;font-size:.9em;color:rgba(255,255,255,.75);line-height:1.7;font-style:italic;
+}
+.hero-spirit strong{color:var(--white);font-style:normal;}
+.scroll-hint{
+  position:absolute;bottom:28px;left:50%;transform:translateX(-50%);
+  color:rgba(255,255,255,.3);font-size:.75em;letter-spacing:.06em;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+.scroll-hint::after{content:'';width:1px;height:32px;background:rgba(255,255,255,.2);}
+
+.section{padding:64px 0;max-width:860px;margin:0 auto;padding-left:20px;padding-right:20px;}
+.section-label{font-size:.72em;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-bottom:10px;}
+.section-title{font-size:clamp(1.5em,4vw,2.2em);font-weight:800;color:var(--black);margin-bottom:40px;line-height:1.2;}
+.section-title span{color:var(--red);}
+
+.day-block{margin-bottom:48px;}
+.day-header{background:var(--black);border-radius:14px 14px 0 0;padding:18px 24px;display:flex;align-items:center;gap:14px;}
+.day-header .day-num{
+  background:var(--red);color:var(--white);font-weight:900;font-size:1.5em;line-height:1;
+  width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.day-header .day-name{font-size:1.15em;font-weight:800;color:var(--white);}
+.day-header .day-vibe{font-size:.8em;color:rgba(255,255,255,.55);margin-top:2px;}
+.day-body{background:var(--white);border-radius:0 0 14px 14px;border:1px solid #e8e8e8;border-top:none;padding:8px 0;}
+
+.tl-item{display:flex;gap:0;padding:0 24px;position:relative;}
+.tl-item::before{content:'';position:absolute;left:68px;top:0;bottom:0;width:1px;background:#f0f0f0;}
+.tl-item:last-child::before{display:none;}
+.tl-time{min-width:70px;padding:14px 0;font-size:.78em;font-weight:700;color:var(--red);letter-spacing:.02em;flex-shrink:0;line-height:1.3;}
+.tl-dot{width:10px;height:10px;border-radius:50%;background:var(--red);flex-shrink:0;margin-top:19px;margin-right:16px;margin-left:8px;}
+.tl-content{flex:1;padding:12px 0;}
+.tl-title{font-size:.95em;font-weight:700;color:var(--black);margin-bottom:4px;}
+.tl-buls{list-style:none;padding:0;}
+.tl-buls li{font-size:.83em;color:var(--dgray);padding:2px 0 2px 14px;position:relative;line-height:1.5;}
+.tl-buls li::before{content:'–';position:absolute;left:0;color:var(--gray);}
+.tl-sep{margin:4px 24px;border:none;border-top:1px solid var(--lgray);}
+
+.note{margin:8px 24px;background:var(--lgray);border-radius:8px;padding:10px 14px;font-size:.82em;color:var(--dgray);display:flex;gap:8px;line-height:1.5;}
+.note .nt-icon{color:var(--red);flex-shrink:0;font-weight:700;}
+.tip{margin:8px 24px;background:#fff5f5;border-left:3px solid var(--red);border-radius:0 8px 8px 0;padding:10px 14px;font-size:.82em;color:var(--dgray);display:flex;gap:8px;line-height:1.5;}
+.tip .nt-icon{color:var(--red);flex-shrink:0;}
+
+.rules-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;}
+.rule-item{background:var(--white);border-radius:12px;border:1px solid #e8e8e8;padding:16px 18px;display:flex;align-items:flex-start;gap:10px;}
+.rule-emoji{font-size:1.2em;flex-shrink:0;line-height:1.3;}
+.rule-text{font-size:.85em;color:var(--dgray);line-height:1.45;font-weight:500;}
+
+.tips-list{display:flex;flex-direction:column;gap:10px;}
+.tip-row{background:var(--white);border-radius:12px;border:1px solid #e8e8e8;padding:14px 18px;display:flex;align-items:center;gap:14px;}
+.tip-star{color:var(--red);font-size:1.1em;flex-shrink:0;}
+.tip-txt{font-size:.87em;color:var(--dgray);line-height:1.4;}
+
+.info-grid{display:flex;flex-direction:column;gap:10px;}
+.info-row{background:var(--white);border-radius:12px;border:1px solid #e8e8e8;padding:14px 18px;display:flex;gap:12px;align-items:flex-start;}
+.info-label{font-size:.8em;font-weight:700;color:var(--black);min-width:160px;flex-shrink:0;}
+.info-val{font-size:.82em;color:var(--dgray);line-height:1.45;}
+@media(max-width:500px){.info-row{flex-direction:column;gap:4px;}.info-label{min-width:0;}}
+
+.divider{height:1px;background:linear-gradient(90deg,transparent,#ddd,transparent);margin:0 0 48px;}
+
+.riu-section{background:var(--black);padding:64px 0;}
+.riu-inner{max-width:860px;margin:0 auto;padding:0 20px;}
+.riu-section .section-label{color:#ff6666;}
+.riu-section .section-title{color:var(--white);}
+.riu-section .section-title span{color:var(--red);}
+.riu-cats{display:flex;flex-direction:column;gap:28px;}
+.riu-cat-title{font-size:.75em;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--red);border-bottom:1px solid #333;padding-bottom:8px;margin-bottom:12px;}
+.riu-items{display:flex;flex-direction:column;gap:6px;}
+.riu-item{display:flex;align-items:baseline;gap:12px;padding:8px 12px;border-radius:8px;background:rgba(255,255,255,.04);}
+.riu-item:hover{background:rgba(255,255,255,.07);}
+.riu-item .ri-icon{font-size:1em;flex-shrink:0;width:24px;text-align:center;}
+.riu-item .ri-name{font-size:.85em;color:rgba(255,255,255,.85);font-weight:600;flex:1;}
+.riu-item .ri-time{font-size:.78em;color:var(--red);font-weight:600;white-space:nowrap;}
+.riu-item .ri-note{font-size:.74em;color:rgba(255,255,255,.35);font-style:italic;}
+
+footer{background:var(--black);border-top:1px solid #2a2a2a;text-align:center;padding:40px 20px;}
+footer .ft-main{font-size:1.1em;font-weight:700;color:var(--white);margin-bottom:6px;}
+footer .ft-sub{font-size:.8em;color:rgba(255,255,255,.35);}
+footer .ft-heart{color:var(--red);}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">AMICALE <span>CTI</span></div>
+  <div class="nav-links">
+    <a href="#programme">Programme</a>
+    <a href="#activites">Activités RIU</a>
+    <a href="#regles">À retenir</a>
+    <a href="#logistique">Logistique</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-tag">&#x1F334; Week-End Amicale CTI</div>
+  <h1>CHILL<span>&amp; VIBE</span></h1>
+  <div class="hero-sub">RIU Baobab — Dakar, Sénégal</div>
+  <div class="hero-loc">10, 11 &amp; 12 AVRIL 2025</div>
+  <div class="hero-dates">
+    <div class="hero-date"><div class="day">Vendredi</div><div class="num">10</div><div class="month">AVRIL</div></div>
+    <div class="hero-date"><div class="day">Samedi</div><div class="num">11</div><div class="month">AVRIL</div></div>
+    <div class="hero-date"><div class="day">Dimanche</div><div class="num">12</div><div class="month">AVRIL</div></div>
+  </div>
+  <div class="hero-spirit">
+    <strong>Pas un séminaire. Pas une fête incontrôlée.</strong><br>
+    Une respiration — un moment humain — un renforcement naturel des liens.
+  </div>
+  <div class="scroll-hint">Découvrir le programme</div>
+</section>
+
+<!-- PROGRAMME -->
+<div id="programme" style="background:var(--xlgray);padding-top:8px;">
+<div class="section">
+  <div class="section-label">Programme complet</div>
+  <div class="section-title">Trois jours, <span>une équipe</span></div>
+
+  <!-- VENDREDI -->
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-num">10</div>
+      <div class="day-info">
+        <div class="day-name">Vendredi 10 Avril</div>
+        <div class="day-vibe">Arrivée &amp; Ambiance posée</div>
+      </div>
+    </div>
+    <div class="day-body">
+
+      <div class="tl-item">
+        <div class="tl-time">14h00<br>18h00</div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-title">Arrivée &amp; Installation</div>
+          <ul class="tl-buls">
+            <li>Check-in — chacun s'installe tranquillement</li>
+            <li>On se repose jusqu'à 18h</li>
+          </ul>
+        </div>
+      </div>
+      <hr class="tl-sep">
+
+      <div class="tl-item">
+        <div class="tl-time">18h00</div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-title">📸 Prises de photos — sortie groupe</div>
+          <ul class="tl-buls">
+            <li>Message dans le groupe — on sort tous ensemble</li>
+          </ul>
+        </div>
+      </div>
+      <hr class="tl-sep">
+
+      <div class="tl-item">
+        <div class="tl-time">20h00</div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-title">Dîner ensemble</div>
+          <ul class="tl-buls">
+            <li>Tables groupées, ambiance sans rigidité</li>
+            <li>Dîner assuré jusqu'à 22h30</li>
+          </ul>
+        </div>
+      </div>
+      <hr class="tl-sep">
+
+      <div class="tl-item">
+        <div class="tl-time">21h15<br>22h20</div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-title">Spectacle RIU — Variety Music</div>
+          <ul class="tl-buls">
+            <li>Spectacle organisé par l'hôtel — Théâtre Soruba</li>
+          </ul>
+        </div>
+      </div>
+      <hr class="tl-sep">
+
+      <div class="tl-item">
+        <div class="tl-time">22h30</div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-title">Regroupement &amp; Jeux 🎲</div>
+          <ul class="tl-buls">
+            <li>Uno, Lido, Mime, Trivial Pursuit…</li>
+            <li>Discussions libres, ambiance posée, retrouvailles hors cadre pro</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tip"><span class="nt-icon">&#x2605;</span>Snack nuit disponible au Restaurant Safari après 23h jusqu'à 6h du matin</div>
+      <div class="note"><span class="nt-icon">&#x2192;</span>Pas besoin de forcer — on garde de l'énergie pour samedi !</div>
+
+    </div>
+  </div>
+
+  <!-- SAMEDI -->
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-num">11</div>
+      <div class="day-info">
+        <div class="day-name">Samedi 11 Avril</div>
+        <div class="day-vibe">Cohésion naturelle &amp; Bonnes vibes</div>
+      </div>
+    </div>
+    <div class="day-body">
+
+      <div class="tl-item">
+        <div class="tl-time">07h30<br>10h00</div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-title">Petit-déjeuner</div>
+          <ul class="tl-buls">
+            <li>Chacun vient à son rythme</li>
+            <li>Continental disponible jusqu'à 12h pour les lève-tard</li>
+          </ul>
+        </div>
+      </div>
+      <hr class="tl-sep">
+
+      <div class="tl-item">
+        <div class="tl-time">10h00<br>12h30</div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-title">Quartier libre — chacun choisit</div>
+          <ul class="tl-buls">
+            <li>Plage &amp; piscines • Splash (toboggan) • Canoë-Kayak</li>
+            <li>SPA gratuit : piscine froide + tiède + bain vapeur</li>
+            <li>Sport &amp; Aquagym • Water-polo</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tip"><span class="nt-icon">&#x2605;</span>Conseil : profiter du SPA et du Kayak le matin — plus calme qu'après-midi</div>
+      <div class="note"><span class="nt-icon">&#x2139;</span>SPA : réserver la veille de préférence</div>
+      <hr class="tl-sep">
+
+      <div class="tl-item">
+        <div class="tl-time">13h30</div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-title">Déjeuner — ENSEMBLE</div>
+          <ul class="tl-buls">
+            <li>Moment convivial, discussions naturelles, hors boulot</li>
+          </ul>
+        </div>
+      </div>
+      <hr class="tl-sep">
+
+      <div class="tl-item">
+        <div class="tl-time">16h00<br>18h00</div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-title">Activités en équipes par affinité</div>
+          <ul class="tl-buls">
+            <li>Équipe Foot • Volley • Pétanque</li>
+            <li>Équipe Zumba • Riumba • Cours de danse</li>
+            <li>Équipe Piscine • Magic Carpet • Bingo</li>
+          </ul>
+        </div>
+      </div>
+      <div class="note"><span class="nt-icon">&#x2192;</span>Tout le monde est dehors et actif — les groupes se forment par affinité</div>
+      <div class="tip"><span class="nt-icon">&#x2605;</span>Tableau des activités en face du bar Safari — tableau blanc interactif</div>
+      <hr class="tl-sep">
+
+      <div class="tl-item">
+        <div class="tl-time">18h30</div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-title">Coucher de soleil 🔥 — tout le monde se retrouve</div>
+          <ul class="tl-buls">
+            <li>Photos, échanges, ambiance posée</li>
+          </ul>
+        </div>
+      </div>
+      <div class="note"><span class="nt-icon">&#x2192;</span>C'est souvent le moment le plus qualitatif du week-end !</div>
+      <hr class="tl-sep">
+
+      <div class="tl-item">
+        <div class="tl-time">19h30<br>20h00</div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-title">Live Music — Soruba</div>
+          <ul class="tl-buls">
+            <li>Ambiance musicale live avant le spectacle</li>
+          </ul>
+        </div>
+      </div>
+      <hr class="tl-sep">
+
+      <div class="tl-item">
+        <div class="tl-time">20h00</div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-title">Dîner + Anniversaires Q1 🎉</div>
+          <ul class="tl-buls">
+            <li>Style libre — venez comme vous êtes, avec votre propre style</li>
+            <li>Célébration des anniversaires du premier trimestre</li>
+          </ul>
+        </div>
+      </div>
+      <hr class="tl-sep">
+
+      <div class="tl-item">
+        <div class="tl-time">22h00<br>23h00</div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-title">Spectacle RIU — Around Africa + Nguell</div>
+          <ul class="tl-buls">
+            <li>LE spectacle de la soirée — Théâtre Soruba</li>
+          </ul>
+        </div>
+      </div>
+      <hr class="tl-sep">
+
+      <div class="tl-item">
+        <div class="tl-time">23h00</div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-title">Soirée ADUNA (23h – 1h30) 🎊</div>
+          <ul class="tl-buls">
+            <li>Danse, musique, bonne humeur</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tip"><span class="nt-icon">&#x2605;</span>Snack Safari disponible après 23h jusqu'à 6h du matin</div>
+
+    </div>
+  </div>
+
+  <!-- DIMANCHE -->
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-num">12</div>
+      <div class="day-info">
+        <div class="day-name">Dimanche 12 Avril</div>
+        <div class="day-vibe">Clôture soft</div>
+      </div>
+    </div>
+    <div class="day-body">
+
+      <div class="tl-item">
+        <div class="tl-time">07h30<br>10h00</div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-title">Petit-déjeuner</div>
+          <ul class="tl-buls">
+            <li>Ambiance tranquille, dernier matin ensemble</li>
+            <li>Continental jusqu'à 12h pour les couche-tard de la veille</li>
+          </ul>
+        </div>
+      </div>
+      <hr class="tl-sep">
+
+      <div class="tl-item">
+        <div class="tl-time">10h00<br>13h00</div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-title">Prêt pour rentrer &amp; Quartier libre</div>
+          <ul class="tl-buls">
+            <li>Check-out, bagages, dernier tour si besoin</li>
+          </ul>
+        </div>
+      </div>
+      <hr class="tl-sep">
+
+      <div class="tl-item">
+        <div class="tl-time">12h30<br>15h30</div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-title">Déjeuner de clôture</div>
+          <ul class="tl-buls">
+            <li>Repas final ensemble</li>
+          </ul>
+        </div>
+      </div>
+      <hr class="tl-sep">
+
+      <div class="tl-item">
+        <div class="tl-time">Avant départ</div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-title">Photo de groupe &amp; mot de fin 📸</div>
+          <ul class="tl-buls">
+            <li>Photo de groupe obligatoire !</li>
+            <li>Petit mot informel : merci / bonne vibe — Retour calme</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ACTIVITÉS RIU -->
+<div id="activites" class="riu-section">
+  <div class="riu-inner">
+    <div class="section-label">Référence complète</div>
+    <div class="section-title" style="margin-bottom:32px;">Activités <span>RIU Baobab</span></div>
+    <div class="riu-cats">
+
+      <div>
+        <div class="riu-cat-title">&#x1F374; Restauration</div>
+        <div class="riu-items">
+          <div class="riu-item"><span class="ri-icon">&#x2615;</span><span class="ri-name">Petit-déjeuner</span><span class="ri-time">7h30 – 10h00</span></div>
+          <div class="riu-item"><span class="ri-icon">&#x2615;</span><span class="ri-name">Petit-déj Continental (lève-tard)</span><span class="ri-time">10h00 – 12h00</span></div>
+          <div class="riu-item"><span class="ri-icon">&#x1F37D;&#xFE0F;</span><span class="ri-name">Déjeuner</span><span class="ri-time">12h30 – 15h30</span></div>
+          <div class="riu-item"><span class="ri-icon">&#x1F37D;&#xFE0F;</span><span class="ri-name">Snack Piscine</span><span class="ri-time">12h30 – 18h00</span></div>
+          <div class="riu-item"><span class="ri-icon">&#x1F37D;&#xFE0F;</span><span class="ri-name">Dîner</span><span class="ri-time">18h30 – 22h30</span></div>
+          <div class="riu-item"><span class="ri-icon">&#x1F37D;&#xFE0F;</span><span class="ri-name">Snack nuit — Restaurant Safari</span><span class="ri-time">23h00 – 6h00</span></div>
+          <div class="riu-item"><span class="ri-icon">&#x1F37D;&#xFE0F;</span><span class="ri-name">Restauration thématique</span><span class="ri-note">Réserver à la réception ou QR code</span></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="riu-cat-title">&#x1F3CA; Sports &amp; Aquatique</div>
+        <div class="riu-items">
+          <div class="riu-item"><span class="ri-icon">&#x1F3CA;</span><span class="ri-name">Piscines (3) &amp; Plage</span><span class="ri-time">10h00 – 17h00</span></div>
+          <div class="riu-item"><span class="ri-icon">&#x1F4A6;</span><span class="ri-name">Splash (toboggan)</span><span class="ri-time">10h00 – 17h00</span></div>
+          <div class="riu-item"><span class="ri-icon">&#x1F6F6;</span><span class="ri-name">Canoë &amp; Kayak</span><span class="ri-time">10h00 – 17h00</span><span class="ri-note"> — Bureau derrière le Spa</span></div>
+          <div class="riu-item"><span class="ri-icon">&#x1F3CA;</span><span class="ri-name">Aquagym &amp; Water-polo</span><span class="ri-time">10h00 – 13h00</span></div>
+          <div class="riu-item"><span class="ri-icon">&#x26FD;</span><span class="ri-name">Tapis magique (Magic Carpet)</span><span class="ri-time">10h00 – 13h00</span><span class="ri-note"> — Sur l'eau</span></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="riu-cat-title">&#x26BD; Sports &amp; Activités terrestres</div>
+        <div class="riu-items">
+          <div class="riu-item"><span class="ri-icon">&#x26BD;</span><span class="ri-name">Foot • Volley • Pétanque</span><span class="ri-time">16h00 – 18h00</span></div>
+          <div class="riu-item"><span class="ri-icon">&#x1F483;</span><span class="ri-name">Cours de danse • Riumba • Zumba</span><span class="ri-time">16h00 – 18h00</span></div>
+          <div class="riu-item"><span class="ri-icon">&#x1F483;</span><span class="ri-name">Cours de danse (Pepe's Food)</span><span class="ri-time">17h30</span></div>
+          <div class="riu-item"><span class="ri-icon">&#x1F3B2;</span><span class="ri-name">Bingo games avec lots</span><span class="ri-note">Voir programme sur place</span></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="riu-cat-title">&#x1F6C1; SPA (accès gratuit)</div>
+        <div class="riu-items">
+          <div class="riu-item"><span class="ri-icon">&#x1F6C1;</span><span class="ri-name">Mini piscine froide + tiède + bain vapeur</span><span class="ri-time">10h00 – 21h00</span></div>
+        </div>
+        <div style="margin:8px 0;background:rgba(255,255,255,.06);border-radius:8px;padding:10px 14px;font-size:.82em;color:rgba(255,255,255,.8);display:flex;gap:8px;line-height:1.5;">
+          <span style="color:var(--red);font-weight:700;">&#x2139;</span>
+          <span>Réserver la veille de préférence — Soins payants disponibles</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="riu-cat-title">&#x1F3AD; Spectacles &amp; Entertainment</div>
+        <div class="riu-items">
+          <div class="riu-item"><span class="ri-icon">&#x1F483;</span><span class="ri-name">Mini disco enfants — Soruba</span><span class="ri-time">18h30 (35 min)</span></div>
+          <div class="riu-item"><span class="ri-icon">&#x1F3B6;</span><span class="ri-name">Live Music — Soruba</span><span class="ri-time">19h30 – 20h00</span></div>
+          <div class="riu-item"><span class="ri-icon">&#x1F3AD;</span><span class="ri-name">Spectacle Vendredi — Variety Music</span><span class="ri-time">21h15 – 22h20</span></div>
+          <div class="riu-item"><span class="ri-icon">&#x1F3AD;</span><span class="ri-name">Spectacle Samedi — Around Africa + Nguell</span><span class="ri-time">22h00 – 23h00</span></div>
+          <div class="riu-item"><span class="ri-icon">&#x1F57A;</span><span class="ri-name">Disco Adouna</span><span class="ri-time">23h00 – 1h30</span></div>
+        </div>
+        <div style="margin:8px 0;background:rgba(204,0,0,.12);border-left:3px solid var(--red);border-radius:0 8px 8px 0;padding:10px 14px;font-size:.82em;color:rgba(255,255,255,.75);display:flex;gap:8px;line-height:1.5;">
+          <span style="color:var(--red);font-weight:700;">&#x2605;</span>
+          <span>Programme complet : tableau blanc interactif en face du bar Safari</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="riu-cat-title">&#x1F476; Enfants — Riuland</div>
+        <div class="riu-items">
+          <div class="riu-item"><span class="ri-icon">&#x1F476;</span><span class="ri-name">Riuland — Moniteurs dédiés (dès 4 ans)</span><span class="ri-time">10h–12h30 puis 15h30–17h</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- À RETENIR -->
+<div id="regles" style="background:var(--xlgray);">
+<div class="section">
+  <div class="section-label">À retenir</div>
+  <div class="section-title">L'état d'esprit <span>du week-end</span></div>
+  <div class="rules-grid">
+    <div class="rule-item"><div class="rule-emoji">✅</div><div class="rule-text">Pas de pression de participation</div></div>
+    <div class="rule-item"><div class="rule-emoji">✅</div><div class="rule-text">Mélanger les équipes naturellement</div></div>
+    <div class="rule-item"><div class="rule-emoji">✅</div><div class="rule-text">Éviter de parler boulot en continu</div></div>
+    <div class="rule-item"><div class="rule-emoji">✅</div><div class="rule-text">Ambiance inclusive — personne laissé de côté</div></div>
+  </div>
+
+  <div class="divider" style="margin-top:48px;margin-bottom:32px;"></div>
+
+  <div class="section-label">Pour que ça déchire</div>
+  <div class="section-title" style="margin-bottom:24px;">Petits plus qui font <span>la diff</span></div>
+  <div class="tips-list">
+    <div class="tip-row"><span class="tip-star">&#x1F3B5;</span><span class="tip-txt">Playlist : Afrobeat, Afropop, R&amp;B — Burna Boy, Wizkid, Davido, Youssou N'Dour</span></div>
+    <div class="tip-row"><span class="tip-star">&#x1F50A;</span><span class="tip-txt">Une bonne enceinte pour la plage &amp; le regroupement</span></div>
+    <div class="tip-row"><span class="tip-star">&#x1F457;</span><span class="tip-txt">Samedi soir : <strong>venez avec votre style</strong> — pas de dress code, chacun fait comme il se sent</span></div>
+    <div class="tip-row"><span class="tip-star">&#x1F4F8;</span><span class="tip-txt">Photographe officiel : <strong>Jean Louis</strong></span></div>
+  </div>
+</div>
+</div>
+
+<!-- LOGISTIQUE -->
+<div id="logistique" style="background:var(--white);border-top:1px solid #e8e8e8;">
+<div class="section">
+  <div class="section-label">Organisation</div>
+  <div class="section-title">Logistique &amp; <span>Contacts</span></div>
+  <div class="info-grid">
+    <div class="info-row"><div class="info-label">Organisation</div><div class="info-val">Bureau de l'Amicale CTI</div></div>
+    <div class="info-row"><div class="info-label">Jeux</div><div class="info-val">Révélation vendredi soir lors du regroupement</div></div>
+    <div class="info-row"><div class="info-label">Sons &amp; animations</div><div class="info-val">Mike &amp; Karis — et bonus : Ivan</div></div>
+    <div class="info-row"><div class="info-label">Photos officielles</div><div class="info-val">Jean Louis</div></div>
+    <div class="info-row"><div class="info-label">Anniversaires Q1</div><div class="info-val">Célébration lors du dîner samedi à 20h00 — préparer une surprise !</div></div>
+    <div class="info-row"><div class="info-label">SPA — réservation</div><div class="info-val">La veille de préférence (accès gratuit : piscines + bain vapeur)</div></div>
+    <div class="info-row"><div class="info-label">Canoë / Kayak</div><div class="info-val">Réservation au bureau derrière le Spa</div></div>
+    <div class="info-row"><div class="info-label">Restaurant thématique</div><div class="info-val">Réserver à la réception ou via QR code sur place</div></div>
+  </div>
+</div>
+</div>
+
+<footer>
+  <div class="ft-main">Bon week-end à tous ! &#x1F334;&#x1F31F;</div>
+  <div class="ft-sub" style="margin-top:8px;">RIU Baobab &nbsp;—&nbsp; 10, 11 &amp; 12 Avril 2025 &nbsp;—&nbsp; Dakar, Sénégal</div>
+  <div class="ft-sub" style="margin-top:6px;">Amicale CTI <span class="ft-heart">&#x2665;</span></div>
+</footer>
+
+<script>
+const sections=[...document.querySelectorAll('[id]')].filter(el=>['programme','activites','regles','logistique'].includes(el.id));
+const links=document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  sections.forEach(s=>{if(window.scrollY>=s.offsetTop-80)cur=s.id;});
+  links.forEach(l=>{
+    l.style.color=l.getAttribute('href')==='#'+cur?'var(--white)':'rgba(255,255,255,.75)';
+    l.style.background=l.getAttribute('href')==='#'+cur?'rgba(204,0,0,.35)':'';
+  });
+},{passive:true});
+</script>
+</body>
+</html>
